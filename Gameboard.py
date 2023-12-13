@@ -15,8 +15,6 @@ class Gameboard:
         obstacles = sample(Gameboard.get_empty(gameboard), k=int(0.2 * size**2))
         for coord in obstacles: gameboard[tuple(coord)] = C.OBSTACLE
 
-        np.argwhere(gameboard == 0)
-
         return gameboard
     
     def _random_snake(self) -> List[Tuple[int, int]]:
@@ -40,17 +38,28 @@ class Gameboard:
             "size": self._size
         }
     
-    def move_snake(self, direction: str, food: bool) -> bool:
+    def get_gameboard(self) -> np.ndarray:
+        """
+        Returns a copy of the gameboard
+        """
+        return self._gameboard.copy()
+    
+    def _render_snake(self, prev: Tuple[int, int], next: Tuple[int, int]) -> None:
+        if prev: self._gameboard[prev] = 0
+        self._gameboard[next] = C.SNAKE
+    
+    def move_snake(self, direction: str) -> int:
         """
         Moves snake on gameboard, returns True if snake hit obstacle, otherwise False
         """
         assert direction in C.DIRECTIONS.keys(), "direction not in list"
-        assert isinstance(food, bool), "food must be True or False"
 
         next = tuple(map(sum, zip(C.DIRECTIONS[direction], self._snake[0])))
         if (any([n < 0 or n >= self._size for n in next])
-            or manhattan(self._snake[0], next) > 1):
-            return True
+            or manhattan(self._snake[0], next) > 1 or self._gameboard[next] < 0):
+            return C.QUIT
+        cell = self._gameboard[next]
         self._snake.insert(0, next)
-        self._snake.pop() if not food else None
-        return False
+        prev = self._snake.pop() if cell < 1 else None
+        self._render_snake(prev, next)
+        return cell
