@@ -25,6 +25,9 @@ class Controller:
                 slither = self._gameboard.move_snake(snake_state["direction"])
                 if slither == C.QUIT:
                     game_over = True
+                elif slither > 0:
+                    self._snake.eat(slither)
+                self._display.render_score(f"SCORE: {snake_state['score']}")
                 self._display.render_gameboard(self._gameboard.get_gameboard())
 
 if __name__ == "__main__":
