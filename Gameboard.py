@@ -12,8 +12,10 @@ class Gameboard:
 
     def _init_gameboard(size: int) -> np.ndarray:
         gameboard = np.zeros((size, size), dtype=int)
-        obstacles = sample(Gameboard.get_empty(gameboard), k=int(0.2 * size**2))
+        obstacles = sample(Gameboard.get_empty(gameboard), k=int(0.1 * size**2))
         for coord in obstacles: gameboard[tuple(coord)] = C.OBSTACLE
+        food = sample(Gameboard.get_empty(gameboard), k=3)
+        for coord in food: gameboard[tuple(coord)] = choice(C.FOOD)
 
         return gameboard
     
@@ -47,6 +49,10 @@ class Gameboard:
     def _render_snake(self, prev: Tuple[int, int], next: Tuple[int, int]) -> None:
         if prev: self._gameboard[prev] = 0
         self._gameboard[next] = C.SNAKE
+
+    def _replenish_food(self) -> None:
+        food = choice(Gameboard.get_empty(self._gameboard))
+        self._gameboard[tuple(food)] = choice(C.FOOD)
     
     def move_snake(self, direction: str) -> int:
         """
@@ -61,5 +67,6 @@ class Gameboard:
         cell = self._gameboard[next]
         self._snake.insert(0, next)
         prev = self._snake.pop() if cell < 1 else None
+        self._replenish_food() if cell > 0 else None
         self._render_snake(prev, next)
         return cell
