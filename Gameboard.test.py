@@ -7,6 +7,12 @@ def init_board(gameboard: Gameboard):
     assert len(np.argwhere(gameboard._gameboard == -2).tolist()) == 1, "incorrect number of snake spaces"
     assert len(np.argwhere(gameboard._gameboard == 0).tolist()) == int(0.8 * 100) - 1, "incorrect number of free spaces"
 
+def check_state(gameboard: Gameboard):
+    state = gameboard.get_state()
+    assert isinstance(state["gameboard"], np.ndarray), "gameboard is not an ndarray"
+    assert isinstance(state["snake"], list) and len(state["snake"]) == 1, "snake is not a list of length 1"
+    assert state["size"] == 10, "size not correct in state"
+
 if __name__ == "__main__":
     gameboard = Gameboard(10)
     init_board(gameboard)

@@ -28,3 +28,13 @@ class Gameboard:
         Returns a list of integer 2-tuple coordinates of empty cells
         """
         return [tuple(coord) for coord in np.argwhere(gameboard == 0).tolist()]
+    
+    def get_state(self) -> np.ndarray:
+        """
+        Returns a copy of the gameboard in its current state
+        """
+        return {
+            "gameboard": self._gameboard.copy(),
+            "snake": self._snake.copy(),
+            "size": self._size
+        }
