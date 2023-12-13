@@ -11,6 +11,7 @@ class Controller:
         self._display = Display(size)
     
     def start_game(self):
+        started = False
         running = True
         game_over = False
         while running:
@@ -18,18 +19,16 @@ class Controller:
             if key == "QUIT":
                 sys.exit()
             elif key in C.DIRECTIONS.keys():
+                started = True
                 self._snake.change_direction(key)
             
             if not game_over:
                 snake_state = self._snake.get_state()
-                slither = self._gameboard.move_snake(snake_state["direction"])
-                if slither == C.QUIT:
-                    game_over = True
-                elif slither > 0:
-                    self._snake.eat(slither)
+                if started:
+                    slither = self._gameboard.move_snake(snake_state["direction"])
+                    if slither == C.QUIT:
+                        game_over = True
+                    elif slither > 0:
+                        self._snake.eat(slither)
                 self._display.render_score(f"SCORE: {snake_state['score']}")
                 self._display.render_gameboard(self._gameboard.get_gameboard())
-
-if __name__ == "__main__":
-    game = Controller()
-    game.start_game()
