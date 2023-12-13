@@ -17,3 +17,7 @@ class Snake:
             "length": self._length,
             "score": self._score
         }
+    
+    def change_direction(self, direction: str) -> None:
+        assert direction in C.DIRECTIONS.keys()
+        self._direction = direction

@@ -17,8 +17,14 @@ def check_state(snake: Snake):
     assert state["score"] == 10, "incorrect score in state"
     assert state["direction"] in C.DIRECTIONS.keys(), "incorrect direction in state"
 
+def check_direction(snake: Snake):
+    for dir in C.DIRECTIONS.keys():
+        snake.change_direction(dir)
+        assert snake._direction == dir, "incorrect direction after change"
+
 if __name__ == "__main__":
     snake = Snake()
     init_snake(snake)
     eat_food(snake)
     check_state(snake)
+    check_direction(snake)
