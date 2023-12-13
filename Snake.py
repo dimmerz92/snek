@@ -3,7 +3,7 @@ from random import choice
 
 class Snake:
     def __init__(self):
-        self._direction = choice(list(C.DIRECTIONS.keys()))
+        self._direction = None
         self._length = 1
         self._score = 0
 
