@@ -1,6 +1,7 @@
 import constants as C
 import numpy as np
 from random import choice, sample
+from helpers import manhattan
 from typing import List, Tuple
 
 class Gameboard:
@@ -38,3 +39,18 @@ class Gameboard:
             "snake": self._snake.copy(),
             "size": self._size
         }
+    
+    def move_snake(self, direction: str, food: bool) -> bool:
+        """
+        Moves snake on gameboard, returns True if snake hit obstacle, otherwise False
+        """
+        assert direction in C.DIRECTIONS.keys(), "direction not in list"
+        assert isinstance(food, bool), "food must be True or False"
+
+        next = tuple(map(sum, zip(C.DIRECTIONS[direction], self._snake[0])))
+        if (any([n < 0 or n >= self._size for n in next])
+            or manhattan(self._snake[0], next) > 1):
+            return True
+        self._snake.insert(0, next)
+        self._snake.pop() if not food else None
+        return False

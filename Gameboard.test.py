@@ -13,6 +13,13 @@ def check_state(gameboard: Gameboard):
     assert isinstance(state["snake"], list) and len(state["snake"]) == 1, "snake is not a list of length 1"
     assert state["size"] == 10, "size not correct in state"
 
+def check_movement(gameboard: Gameboard):
+    moved = gameboard.move_snake("NORTH", True)
+    assert isinstance(moved, bool), "Not a valid movement"
+    assert len(gameboard._snake) == 2, "Snake did not grow after eating"
+
 if __name__ == "__main__":
     gameboard = Gameboard(10)
     init_board(gameboard)
+    check_state(gameboard)
+    check_movement(gameboard)
