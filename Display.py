@@ -13,6 +13,7 @@ class Display:
         self._screen.fill("black")
 
     def render_gameboard(self, gameboard: np.ndarray) -> None:
+        self._screen.fill("black")
         for row in range(self._size):
             for col in range(self._size):
                 cell = gameboard[row, col]
@@ -32,10 +33,10 @@ class Display:
                     border = 0
 
                 pygame.draw.rect(self._screen, colour, rect, border)
-        pygame.display.flip()
+        pygame.display.update()
         self._clock.tick(1)
     
-    def get_key_events(self) -> str:
+    def get_key_events(self) -> str | None:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -52,3 +53,4 @@ class Display:
                     return "EAST"
                 elif event.key in [pygame.K_a, pygame.K_LEFT]:
                     return "WEST"
+        return None
