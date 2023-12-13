@@ -8,9 +8,17 @@ class Display:
         self._cell_size = int(window / size)
 
         pygame.init()
-        self._screen = pygame.display.set_mode((window, window))
+        pygame.display.set_caption("SNEK!!11!1!one!")
+        self._screen = pygame.display.set_mode((window, window + 100))
         self._clock = pygame.time.Clock()
         self._screen.fill("black")
+
+    def render_score(self, text: str) -> None:
+        font = pygame.font.SysFont("monospace", 20)
+        size = font.size(text)
+        display = font.render(text, True, (255, 255, 255))
+        self._screen.blit(display, ((400 - size[0])/2, 50))
+        pygame.display.flip()
 
     def render_gameboard(self, gameboard: np.ndarray) -> None:
         self._screen.fill("black")
@@ -18,7 +26,7 @@ class Display:
             for col in range(self._size):
                 cell = gameboard[row, col]
                 x = col * self._cell_size
-                y = row * self._cell_size
+                y = row * self._cell_size + 100
                 rect = pygame.Rect(x, y, self._cell_size, self._cell_size)
                 colour = (255, 255, 255)
                 border = 1
@@ -27,14 +35,13 @@ class Display:
                     colour = (0, 255, 0)
                     border = 0
                 elif cell in C.FOOD:
-                    colour = (int(cell * 25.5), 0, 0)
+                    colour = (int(cell * 15.5) + 100, 0, 0)
                     border = 0
                 elif cell == C.OBSTACLE:
                     border = 0
 
                 pygame.draw.rect(self._screen, colour, rect, border)
-        pygame.display.update()
-        self._clock.tick(1)
+        self._clock.tick(3)
     
     def get_key_events(self) -> str | None:
         for event in pygame.event.get():
